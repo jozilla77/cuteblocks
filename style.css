@@ -1,0 +1,133 @@
+:root {
+    --bg-color: #FFF0F5; /* Lavender Blush */
+    --text-color: #8E7CC3;
+    --canvas-bg: #FFFFFF;
+    --ui-bg: #F8F8FF; /* Ghost White */
+    --shadow: 0 10px 20px rgba(142, 124, 195, 0.15);
+    --border-radius: 15px;
+    
+    /* Pastel Palette */
+    --color-cyan: #AEC6CF;
+    --color-blue: #C3B1E1;
+    --color-orange: #FFB347;
+    --color-yellow: #FDFD96;
+    --color-green: #77DD77;
+    --color-purple: #B39EB5;
+    --color-red: #FF6961;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Varela Round', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.game-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 2rem;
+    border-radius: 30px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.header {
+    text-align: center;
+    width: 100%;
+}
+
+h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3rem;
+    color: var(--color-blue);
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 0px #FFF, 4px 4px 0px rgba(195, 177, 225, 0.3);
+}
+
+.score-board {
+    font-size: 1.5rem;
+    background: var(--ui-bg);
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    display: inline-block;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.game-area {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+canvas {
+    background-color: var(--canvas-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 4px solid #fff;
+}
+
+#gameCanvas {
+    border: 8px solid #fff;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.next-piece {
+    background: var(--ui-bg);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: var(--shadow);
+    border: 4px solid #fff;
+}
+
+.next-piece h3 {
+    margin-bottom: 0.5rem;
+    color: var(--color-purple);
+}
+
+.controls-info {
+    font-size: 0.9rem;
+    color: #999;
+    text-align: center;
+    line-height: 1.6;
+}
+
+button {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 50px;
+    background-color: var(--color-green);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    box-shadow: 0 4px 0 rgba(119, 221, 119, 0.6);
+}
+
+button:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+button:hover {
+    filter: brightness(1.05);
+}
