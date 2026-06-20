@@ -33,12 +33,13 @@ body {
     background-color: var(--bg-color);
     background-image: url('../icons/game_bg.png');
     background-size: cover;
-    background-position: center;
+    background-position: center top; /* Shift to the top to see the mascot */
     background-attachment: fixed;
     color: var(--text-color);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end; /* Push container down to reveal mascot */
+    padding-bottom: 2vh;
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
@@ -148,16 +149,17 @@ body {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.6);
-    padding: 1.8rem;
+    padding: 1.2rem;
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 100%;
-    max-width: 800px;
-    margin: 1.5rem;
+    max-width: 1100px;
+    margin: 1rem;
+    position: relative; /* Make sure overlays position against this container */
 }
 
 /* Logo and Header Styling */
@@ -265,9 +267,14 @@ h1 {
     position: relative;
     border-radius: var(--border-radius-md);
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(93, 84, 108, 0.15);
-    background: var(--canvas-bg);
-    border: 6px solid #FFF;
+    box-shadow: 0 10px 30px rgba(93, 84, 108, 0.4);
+    background-color: rgba(30, 20, 50, 0.85); /* Darker background for contrast */
+    background-image: 
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.6) 100%),
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 100% 100%, 50px 50px, 50px 50px;
+    border: 4px solid rgba(255, 255, 255, 0.4);
     display: flex;
 }
 
@@ -276,28 +283,55 @@ canvas {
 }
 
 #gameCanvas {
-    width: 500px;
-    height: 1000px;
+    width: 100%;
+    max-height: 60vh; /* Smaller max height to prevent vertical scrolling */
+    height: auto;
+    aspect-ratio: 1/2; /* Keep game grid aspect ratio perfectly square cells */
+    object-fit: contain;
 }
 
 /* Overlay Screens inside the canvas wrapper */
 .overlay-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.overlay-screen.full-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(250, 244, 248, 0.9);
+    border-radius: var(--border-radius-lg);
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    padding: 2rem;
+    z-index: 100;
+}
+
+.start-screen-content {
+    background-color: rgba(255, 255, 255, 0.92);
+    background-image: 
+        radial-gradient(rgba(255, 183, 213, 0.25) 3px, transparent 3px),
+        radial-gradient(rgba(174, 226, 255, 0.25) 3px, transparent 3px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 2.5rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 20px 40px rgba(93, 84, 108, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.9);
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 2rem;
-    text-align: center;
-    z-index: 10;
-    transition: opacity 0.3s ease;
+    max-width: 95%;
 }
 
 .overlay-screen.hidden {
@@ -305,14 +339,28 @@ canvas {
     pointer-events: none;
 }
 
+.studio-footer {
+    position: absolute;
+    bottom: 1.5rem;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #FFF;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+}
+
 .mascot-avatar {
-    width: 120px;
-    height: 120px;
-    background-image: url('../icons/mascot_start.png');
+    width: 220px;
+    height: 220px;
+    background-image: url('../icons/mascot_start_playing.png');
     background-size: contain;
+    background-position: center bottom;
     background-repeat: no-repeat;
     margin-bottom: 1.2rem;
     animation: float-avatar 3s ease-in-out infinite;
+    mix-blend-mode: multiply; /* Make the white background transparent against the card */
 }
 
 @keyframes float-avatar {
@@ -320,7 +368,19 @@ canvas {
     50% { transform: translateY(-8px) rotate(3deg); }
 }
 
-.overlay-screen h2 {
+.title-fun {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #FF69B4, #8D72E1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+    margin-bottom: 1rem;
+    line-height: 1.1;
+}
+
+.overlay-screen h2:not(.title-fun) {
     font-family: 'Fredoka', sans-serif;
     font-size: 1.8rem;
     color: #8D72E1;
@@ -364,14 +424,19 @@ canvas {
 .canvas-preview-wrapper {
     background: rgba(255, 255, 255, 0.4);
     border-radius: var(--border-radius-sm);
-    padding: 0.3rem;
+    padding: 0.5rem;
     border: 2px solid #FFF;
-    display: inline-flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 #nextCanvas {
-    width: 160px;
-    height: 160px;
+    width: 100%;
+    max-width: 110px;
+    height: auto;
+    aspect-ratio: 1/1; /* Keeps it square so drawing coordinates scale perfectly */
 }
 
 /* Keyboard Guide Styling */
@@ -442,6 +507,12 @@ button:active {
 }
 
 /* Icon button for sound */
+.sound-controls {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+}
+
 .icon-btn {
     background: var(--ui-bg);
     border: 1px solid rgba(255, 255, 255, 0.8);
@@ -449,16 +520,30 @@ button:active {
     padding: 0.6rem;
     font-size: 1.1rem;
     border-radius: 50%;
-    width: 42px;
-    height: 42px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+}
+
+.custom-icon {
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #FFF !important; /* White background to make multiply blend nicely, or just keep it solid white to frame the icon */
+    color: transparent;
+}
+
+.custom-icon.muted {
+    filter: grayscale(100%);
+    opacity: 0.5;
 }
 
 .icon-btn:hover {
-    background: #FFF;
-    transform: scale(1.08);
+    background-color: #FFF;
+    transform: scale(1.1);
     box-shadow: 0 6px 12px rgba(142, 132, 158, 0.12);
 }
 

@@ -9,6 +9,7 @@ function init() {
     const startBtn = document.getElementById('startBtn');
     const restartBtn = document.getElementById('restartBtn');
     const soundToggle = document.getElementById('soundToggle');
+    const bgmToggle = document.getElementById('bgmToggle');
 
     // Start & Restart Trigger
     const handleStart = () => {
@@ -21,8 +22,27 @@ function init() {
     // Audio toggle
     soundToggle.addEventListener('click', () => {
         game.isMuted = !game.isMuted;
-        soundToggle.innerText = game.isMuted ? '🔇' : '🔊';
+        if (game.isMuted) {
+            soundToggle.classList.add('muted');
+        } else {
+            soundToggle.classList.remove('muted');
+        }
         soundToggle.blur();
+    });
+
+    // BGM toggle
+    bgmToggle.addEventListener('click', () => {
+        game.isBgmMuted = !game.isBgmMuted;
+        if (game.isBgmMuted) {
+            bgmToggle.classList.add('muted');
+            game.stopBGM();
+        } else {
+            bgmToggle.classList.remove('muted');
+            if (game.isRunning) {
+                game.startBGM();
+            }
+        }
+        bgmToggle.blur();
     });
 
     // Keyboard controls

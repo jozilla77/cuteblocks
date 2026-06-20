@@ -294,16 +294,15 @@ export class Renderer {
     }
 
     drawNext(pair) {
-        // Draw the preview next pair nicely inside the preview window
-        const previewBlockSize = this.nextCanvas.width / 3;
-        const originalBlockSize = this.blockSize;
-        this.blockSize = previewBlockSize; // Hacky swap for preview block sizing
-
-        // Center preview
-        this.drawBlock(this.nextCtx, 1, 1.5, pair.type1, 1, true);
-        this.drawBlock(this.nextCtx, 1, 0.5, pair.type2, 1, true);
-
-        this.blockSize = originalBlockSize; // Restore size
+        if (!pair) return;
+        const size = this.nextCanvas.width / 2.5; // Bubble size
+        const padding = (this.nextCanvas.width - size) / 2; // Center horizontally
+        
+        // Draw top bubble (type1)
+        this.drawMascotHead(this.nextCtx, padding, this.nextCanvas.height * 0.15, size, pair.type1);
+        
+        // Draw bottom bubble (type2)
+        this.drawMascotHead(this.nextCtx, padding, this.nextCanvas.height * 0.15 + size - 2, size, pair.type2);
     }
 
     triggerExplosion(x, y) {

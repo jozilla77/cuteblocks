@@ -17,14 +17,21 @@ export class Game {
         this.dropInterval = 1000;
         this.lastTime = 0;
 
+        this.isBgmMuted = false;
+        this.isPlayingBgm = false;
+        this.audioCtx = null;
+
         this.currentPiece = null;
         this.nextPiece = null;
 
         this.scoreElement = document.getElementById('score');
+        this.highScoreElement = document.getElementById('highScore');
         this.linesElement = document.getElementById('lines-cleared');
         this.startScreen = document.getElementById('startScreen');
         this.gameOverScreen = document.getElementById('gameOverScreen');
         this.finalScoreElement = document.getElementById('finalScore');
+        
+        this.highScore = parseInt(localStorage.getItem('loxleyHighScore')) || 0;
     }
 
     createGrid() {
@@ -53,6 +60,7 @@ export class Game {
         this.lastTime = performance.now();
         this.loop(this.lastTime);
         this.playPopSound(440, 'sine', 0.1); // Start chime
+        this.startBGM();
     }
 
     update(deltaTime) {
@@ -70,6 +78,19 @@ export class Game {
         this.renderer.drawNext(this.nextPiece);
         if (this.currentPiece) {
             const blocks = this.currentPiece.getBlocks();
+            
+            // Draw ghost piece first
+            const ghostY = this.getGhostY();
+            if (ghostY !== undefined) {
+                this.renderer.ctx.save();
+                this.renderer.ctx.globalAlpha = 0.3;
+                blocks.forEach(b => {
+                    this.renderer.drawBlock(this.renderer.ctx, b.x, ghostY + (b.y - this.currentPiece.y), b.type, 1, false);
+                });
+                this.renderer.ctx.restore();
+            }
+
+            // Draw actual piece
             blocks.forEach(b => {
                 this.renderer.drawBlock(this.renderer.ctx, b.x, b.y, b.type);
             });
@@ -182,6 +203,28 @@ export class Game {
             }
         }
         return false;
+    }
+
+    getGhostY() {
+        if (!this.currentPiece) return undefined;
+        let testY = this.currentPiece.y;
+        
+        while (true) {
+            testY++;
+            const pair = {
+                getBlocks: () => {
+                    const offsets = this.currentPiece.getOffsets();
+                    return [
+                        { x: this.currentPiece.x, y: testY },
+                        { x: this.currentPiece.x + offsets.dx, y: testY + offsets.dy }
+                    ];
+                }
+            };
+            if (this.collide(this.grid, pair)) {
+                break;
+            }
+        }
+        return testY - 1;
     }
 
     demergeGrid() {
@@ -404,6 +447,7 @@ export class Game {
         if (this.collide(this.grid, this.currentPiece)) {
             this.gameOver = true;
             this.isRunning = false;
+            this.stopBGM();
             
             // Show custom Game Over Screen
             this.finalScoreElement.innerText = this.score;
@@ -413,9 +457,80 @@ export class Game {
     }
 
     updateStats() {
+        if (this.score > this.highScore) {
+            this.highScore = this.score;
+            localStorage.setItem('loxleyHighScore', this.highScore);
+        }
         // Format with cute leading zeros
+        if (this.highScoreElement) this.highScoreElement.innerText = String(this.highScore).padStart(5, '0');
         this.scoreElement.innerText = String(this.score).padStart(5, '0');
         this.linesElement.innerText = this.linesClearedTotal;
+    }
+
+    // --- BGM Sequencer ---
+    startBGM() {
+        if (this.isBgmMuted || this.isPlayingBgm) return;
+        
+        try {
+            if (!this.audioCtx) {
+                this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (this.audioCtx.state === 'suspended') {
+                this.audioCtx.resume();
+            }
+            
+            this.isPlayingBgm = true;
+            // Playful, catchy synth-pop sequence
+            this.bgmSequence = [
+                329.63, 392.00, 523.25, 659.25, // E4, G4, C5, E5
+                392.00, 329.63, 261.63, 392.00, // G4, E4, C4, G4
+                349.23, 440.00, 523.25, 698.46, // F4, A4, C5, F5
+                523.25, 440.00, 349.23, 440.00  // C5, A4, F4, A4
+            ];
+            this.bgmStep = 0;
+            this.nextNoteTime = this.audioCtx.currentTime + 0.1;
+            this.scheduleBGM();
+        } catch (e) {
+            console.warn("BGM blocked: ", e);
+        }
+    }
+
+    scheduleBGM() {
+        if (!this.isPlayingBgm || this.isBgmMuted) return;
+        
+        while (this.nextNoteTime < this.audioCtx.currentTime + 0.1) {
+            this.playBGMNote(this.nextNoteTime);
+            this.nextBGMNote();
+        }
+        this.bgmTimer = setTimeout(() => this.scheduleBGM(), 25);
+    }
+
+    nextBGMNote() {
+        const secondsPerBeat = 0.22; // ~136 BPM
+        this.nextNoteTime += secondsPerBeat;
+        this.bgmStep = (this.bgmStep + 1) % this.bgmSequence.length;
+    }
+
+    playBGMNote(time) {
+        if (!this.audioCtx) return;
+        const osc = this.audioCtx.createOscillator();
+        const gain = this.audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(this.audioCtx.destination);
+        
+        osc.type = 'triangle';
+        osc.frequency.value = this.bgmSequence[this.bgmStep];
+        
+        gain.gain.setValueAtTime(0.4, time); // Increase volume for BGM
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
+        
+        osc.start(time);
+        osc.stop(time + 0.15);
+    }
+
+    stopBGM() {
+        this.isPlayingBgm = false;
+        if (this.bgmTimer) clearTimeout(this.bgmTimer);
     }
 
     // Custom Web Audio API synthesizer for adorable puzzle effects

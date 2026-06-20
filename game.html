@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Loxley Orbit Bubble Puzzle</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=10">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#FFD1DC">
@@ -30,11 +30,14 @@
     <div class="game-container">
         <div class="header">
             <div class="logo-wrapper">
-                <span class="logo-badge">Fantasy Cute</span>
+                <span class="logo-badge">A Fantasy Game By</span>
                 <h1>Loxley Orbit</h1>
-                <h2 class="sub-title">Bubble Puzzle</h2>
             </div>
             <div class="stats-row">
+                <div class="score-board">
+                    <span class="label">HIGH SCORE</span>
+                    <span id="highScore">00000</span>
+                </div>
                 <div class="score-board">
                     <span class="label">SCORE</span>
                     <span id="score">00000</span>
@@ -47,30 +50,8 @@
         </div>
         
         <div class="game-area">
-            <div class="canvas-wrapper">
-                <canvas id="gameCanvas" width="320" height="640"></canvas>
-                <div id="startScreen" class="overlay-screen">
-                    <div class="mascot-avatar"></div>
-                    <h2>Loxley Orbit</h2>
-                    <p>Combine 4 matching bubbles in a square to merge them into a giant mascot! Connect 5 or more of the same bubble to pop them!</p>
-                    <button id="startBtn">PLAY GAME</button>
-                </div>
-                <div id="gameOverScreen" class="overlay-screen hidden">
-                    <h2>Game Over</h2>
-                    <p>Total Score:</p>
-                    <h3 id="finalScore">0</h3>
-                    <button id="restartBtn">TRY AGAIN</button>
-                </div>
-            </div>
-            
-            <div class="sidebar">
-                <div class="next-piece-box">
-                    <h3>NEXT BUBBLE</h3>
-                    <div class="canvas-preview-wrapper">
-                        <canvas id="nextCanvas" width="110" height="110"></canvas>
-                    </div>
-                </div>
-
+            <!-- Left Sidebar -->
+            <div class="sidebar left-sidebar">
                 <div class="controls-info">
                     <div class="control-row"><span class="key">← →</span> <span>Move</span></div>
                     <div class="control-row"><span class="key">↑</span> <span>Rotate</span></div>
@@ -79,7 +60,23 @@
                 </div>
 
                 <div class="sound-controls">
-                    <button id="soundToggle" class="icon-btn" title="Toggle Sound">🔊</button>
+                    <button id="bgmToggle" class="icon-btn custom-icon" title="Toggle Music" style="background-image: url('icons/icon_music_raw.png')"></button>
+                    <button id="soundToggle" class="icon-btn custom-icon" title="Toggle SFX" style="background-image: url('icons/icon_sfx_raw.png')"></button>
+                </div>
+            </div>
+            
+            <!-- Center Game Board -->
+            <div class="canvas-wrapper">
+                <canvas id="gameCanvas" width="640" height="1280"></canvas>
+            </div>
+            
+            <!-- Right Sidebar -->
+            <div class="sidebar right-sidebar">
+                <div class="next-piece-box">
+                    <h3>NEXT BUBBLE</h3>
+                    <div class="canvas-preview-wrapper">
+                        <canvas id="nextCanvas" width="110" height="110"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,6 +88,25 @@
             <button id="btnRight" class="ctrl-btn">▶</button>
             <button id="btnDrop" class="ctrl-btn">▼</button>
             <button id="btnHardDrop" class="ctrl-btn ctrl-btn-hard">🚀</button>
+        </div>
+        
+        <!-- Full-container overlays -->
+        <div id="startScreen" class="overlay-screen full-overlay">
+            <div class="start-screen-content">
+                <div class="mascot-avatar"></div>
+                <h2 class="title-fun">Orbit Bubble Puzzle</h2>
+                <p>Combine 4 matching bubbles in a square to merge them into a giant mascot! Connect 5 or more of the same bubble to pop them!</p>
+                <button id="startBtn">PLAY GAME</button>
+            </div>
+            <div class="studio-footer">&copy; 2026 Jozilla Studio</div>
+        </div>
+        <div id="gameOverScreen" class="overlay-screen full-overlay hidden">
+            <div class="start-screen-content">
+                <h2>Game Over</h2>
+                <p>Total Score:</p>
+                <h3 id="finalScore">0</h3>
+                <button id="restartBtn">TRY AGAIN</button>
+            </div>
         </div>
     </div>
 
