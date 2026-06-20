@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Loxley Orbit Bubble Puzzle</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#FFD1DC">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Loxley Orbit">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+    <!-- Fantasy Orbit Background Elements -->
+    <div class="fantasy-bg">
+        <img src="icons/mascot_1.png" class="bg-mascot bg-mascot-left" alt="Mascot">
+        <img src="icons/mascot_2.png" class="bg-mascot bg-mascot-right" alt="Mascot">
+        <div class="glow-planet orbit-pink"></div>
+        <div class="glow-planet orbit-blue"></div>
+        <div class="glow-planet orbit-yellow"></div>
+        <div class="star twinkling star-1">★</div>
+        <div class="star twinkling star-2">✦</div>
+        <div class="star twinkling star-3">✦</div>
+        <div class="star twinkling star-4">★</div>
+    </div>
+
+    <div class="game-container">
+        <div class="header">
+            <div class="logo-wrapper">
+                <span class="logo-badge">Fantasy Cute</span>
+                <h1>Loxley Orbit</h1>
+                <h2 class="sub-title">Bubble Puzzle</h2>
+            </div>
+            <div class="stats-row">
+                <div class="score-board">
+                    <span class="label">SCORE</span>
+                    <span id="score">00000</span>
+                </div>
+                <div class="score-board">
+                    <span class="label">POPS</span>
+                    <span id="lines-cleared">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="canvas-wrapper">
+                <canvas id="gameCanvas" width="320" height="640"></canvas>
+                <div id="startScreen" class="overlay-screen">
+                    <div class="mascot-avatar"></div>
+                    <h2>Loxley Orbit</h2>
+                    <p>Combine 4 matching bubbles in a square to merge them into a giant mascot! Connect 5 or more of the same bubble to pop them!</p>
+                    <button id="startBtn">PLAY GAME</button>
+                </div>
+                <div id="gameOverScreen" class="overlay-screen hidden">
+                    <h2>Game Over</h2>
+                    <p>Total Score:</p>
+                    <h3 id="finalScore">0</h3>
+                    <button id="restartBtn">TRY AGAIN</button>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="next-piece-box">
+                    <h3>NEXT BUBBLE</h3>
+                    <div class="canvas-preview-wrapper">
+                        <canvas id="nextCanvas" width="110" height="110"></canvas>
+                    </div>
+                </div>
+
+                <div class="controls-info">
+                    <div class="control-row"><span class="key">← →</span> <span>Move</span></div>
+                    <div class="control-row"><span class="key">↑</span> <span>Rotate</span></div>
+                    <div class="control-row"><span class="key">↓</span> <span>Drop</span></div>
+                    <div class="control-row"><span class="key">SPACE</span> <span>Hard Drop</span></div>
+                </div>
+
+                <div class="sound-controls">
+                    <button id="soundToggle" class="icon-btn" title="Toggle Sound">🔊</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Touch Controls -->
+        <div class="mobile-controls">
+            <button id="btnLeft" class="ctrl-btn">◀</button>
+            <button id="btnRotate" class="ctrl-btn ctrl-btn-action">↻</button>
+            <button id="btnRight" class="ctrl-btn">▶</button>
+            <button id="btnDrop" class="ctrl-btn">▼</button>
+            <button id="btnHardDrop" class="ctrl-btn ctrl-btn-hard">🚀</button>
+        </div>
+    </div>
+
+    <!-- Register service worker for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered!', reg))
+                    .catch(err => console.log('Service Worker registration failed: ', err));
+            });
+        }
+    </script>
+    <script type="module" src="src/puyo_main.js?v=6"></script>
+</body>
+</html>

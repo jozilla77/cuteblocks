@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Loxley Orbit Bubble Puzzle",
+  "version": "1.0.0",
+  "description": "Help Loxley collect cute space bubble blocks in this fantasy puzzle game!",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Play Loxley Orbit",
+    "default_icon": "icons/icon-192.png"
+  },
+  "icons": {
+    "16": "icons/icon-192.png",
+    "48": "icons/icon-192.png",
+    "128": "icons/icon-512.png"
+  }
+}
