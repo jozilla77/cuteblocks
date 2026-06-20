@@ -1,0 +1,18 @@
+Privacy Policy for Orbit Bubble Puzzle
+
+Effective Date: June 20, 2026
+
+1. Information We Collect
+Orbit Bubble Puzzle ("the Extension") does not collect, store, transmit, or share any personal information, user data, or tracking analytics.
+
+2. Local Storage
+The Extension uses your browser's Local Storage solely to save your high score so that it can be preserved between offline play sessions. This data remains entirely on your local device and is never transmitted to our servers or any third parties.
+
+3. Offline Functionality
+The Extension is designed to operate completely offline. It does not require an internet connection to function and does not make external network requests to third-party services.
+
+4. Changes to this Privacy Policy
+If we make any changes to this privacy policy, we will update the Effective Date above. Since the extension operates offline and collects no data, any future changes would primarily reflect new features or capabilities.
+
+5. Contact Us
+If you have any questions or concerns regarding this privacy policy or the extension, please contact Jozilla Studio.

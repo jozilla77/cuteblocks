@@ -295,6 +295,10 @@ export class Renderer {
 
     drawNext(pair) {
         if (!pair) return;
+        
+        // Clear next canvas manually just in case
+        this.nextCtx.clearRect(0, 0, this.nextCanvas.width, this.nextCanvas.height);
+
         const size = this.nextCanvas.width / 2.5; // Bubble size
         const padding = (this.nextCanvas.width - size) / 2; // Center horizontally
         
