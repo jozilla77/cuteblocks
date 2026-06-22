@@ -472,65 +472,25 @@ export class Game {
         if (this.isBgmMuted || this.isPlayingBgm) return;
         
         try {
-            if (!this.audioCtx) {
-                this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (this.audioCtx.state === 'suspended') {
-                this.audioCtx.resume();
+            if (!this.bgmAudio) {
+                this.bgmAudio = new Audio('Gravity_Bloom.mp4');
+                this.bgmAudio.loop = true;
+                this.bgmAudio.volume = 0.4;
             }
             
+            this.bgmAudio.play().catch(e => console.warn("BGM play blocked: ", e));
             this.isPlayingBgm = true;
-            // Playful, catchy synth-pop sequence
-            this.bgmSequence = [
-                329.63, 392.00, 523.25, 659.25, // E4, G4, C5, E5
-                392.00, 329.63, 261.63, 392.00, // G4, E4, C4, G4
-                349.23, 440.00, 523.25, 698.46, // F4, A4, C5, F5
-                523.25, 440.00, 349.23, 440.00  // C5, A4, F4, A4
-            ];
-            this.bgmStep = 0;
-            this.nextNoteTime = this.audioCtx.currentTime + 0.1;
-            this.scheduleBGM();
         } catch (e) {
             console.warn("BGM blocked: ", e);
         }
     }
 
-    scheduleBGM() {
-        if (!this.isPlayingBgm || this.isBgmMuted) return;
-        
-        while (this.nextNoteTime < this.audioCtx.currentTime + 0.1) {
-            this.playBGMNote(this.nextNoteTime);
-            this.nextBGMNote();
-        }
-        this.bgmTimer = setTimeout(() => this.scheduleBGM(), 25);
-    }
-
-    nextBGMNote() {
-        const secondsPerBeat = 0.22; // ~136 BPM
-        this.nextNoteTime += secondsPerBeat;
-        this.bgmStep = (this.bgmStep + 1) % this.bgmSequence.length;
-    }
-
-    playBGMNote(time) {
-        if (!this.audioCtx) return;
-        const osc = this.audioCtx.createOscillator();
-        const gain = this.audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(this.audioCtx.destination);
-        
-        osc.type = 'triangle';
-        osc.frequency.value = this.bgmSequence[this.bgmStep];
-        
-        gain.gain.setValueAtTime(0.4, time); // Increase volume for BGM
-        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
-        
-        osc.start(time);
-        osc.stop(time + 0.15);
-    }
-
     stopBGM() {
         this.isPlayingBgm = false;
-        if (this.bgmTimer) clearTimeout(this.bgmTimer);
+        if (this.bgmAudio) {
+            this.bgmAudio.pause();
+            this.bgmAudio.currentTime = 0;
+        }
     }
 
     // Custom Web Audio API synthesizer for adorable puzzle effects

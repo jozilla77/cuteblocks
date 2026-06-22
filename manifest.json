@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Orbit Bubble Puzzle",
-  "version": "1.0.0",
+  "version": "1.2",
   "description": "A cute fantasy bubble puzzle game. Match 4 or more bubbles to score big! Plays perfectly offline.",
   "action": {
     "default_title": "Play Orbit Bubble Puzzle",

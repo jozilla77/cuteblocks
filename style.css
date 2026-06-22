@@ -31,9 +31,9 @@
 body {
     font-family: 'Outfit', sans-serif;
     background-color: var(--bg-color);
-    background-image: url('../icons/game_bg.png');
+    background-image: url('icons/safe_zone_bg.png');
     background-size: cover;
-    background-position: center top; /* Shift to the top to see the mascot */
+    background-position: center center; /* Keep image perfectly centered on all axes */
     background-attachment: fixed;
     color: var(--text-color);
     display: flex;
@@ -157,7 +157,7 @@ body {
     align-items: center;
     gap: 1rem;
     width: 100%;
-    max-width: 1100px;
+    max-width: 900px;
     margin: 1rem;
     position: relative; /* Make sure overlays position against this container */
 }
