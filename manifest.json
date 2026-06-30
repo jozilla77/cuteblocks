@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Orbit Bubble Puzzle",
+  "name": "Loxley Orbit Bubble Puzzle",
   "version": "1.3",
   "description": "A cute fantasy bubble puzzle game. Match 4 or more bubbles to score big! Plays perfectly offline.",
   "action": {
-    "default_title": "Play Orbit Bubble Puzzle",
+    "default_title": "Play Loxley Orbit Bubble Puzzle",
     "default_icon": {
       "16": "icons/icon-16.png",
       "48": "icons/icon-48.png",
